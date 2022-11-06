@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart' as syspath;
 
 class Imageimput extends StatefulWidget {
   Function saveImagefunction;
@@ -16,7 +16,8 @@ class _ImageimputState extends State<Imageimput> {
   File? _imagestored;
 
   Future<void> _takepictrue() async {
-    final imagepicked = await ImagePicker().pickImage(
+    final picker = ImagePicker();
+    final imagepicked = await picker.pickImage(
       source: ImageSource.camera,
       maxHeight: 600,
     );
@@ -24,12 +25,14 @@ class _ImageimputState extends State<Imageimput> {
       return;
     }
     setState(() {
-      _imagestored = File(imagepicked!.path);
+      _imagestored = File(imagepicked.path);
     });
-    final appdir = await getApplicationDocumentsDirectory();
-    final filename = basename(imagepicked!.path);
-    final savedImage =
-        await imagepicked.saveTo('${appdir.path}/$filename.jpg') as File;
+    final appdir = await syspath.getApplicationDocumentsDirectory();
+
+    final filename = path.basename(imagepicked.path);
+    File tempfile = File(imagepicked.path);
+    final String pathstring = '${appdir.path}/$filename';
+    final savedImage = await tempfile.copy(pathstring);
     widget.saveImagefunction(savedImage);
   }
 

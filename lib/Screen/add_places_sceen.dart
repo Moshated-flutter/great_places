@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:great_places/models/places.dart';
 import 'package:great_places/providers/places.dart';
 import 'package:great_places/widgets/image_input.dart';
+import 'package:great_places/widgets/location_wiget.dart';
 import 'package:provider/provider.dart';
 
 class AddPlacesScreen extends StatefulWidget {
@@ -26,7 +27,7 @@ class _AddPlacesScreenState extends State<AddPlacesScreen> {
       return;
     }
     _formkey.currentState!.save();
-    Provider.of<Placesprovider>(context).addplace(
+    Provider.of<Placesprovider>(context, listen: false).addplace(
       _savedtitle!,
       _savedImage!,
       savedloc!,
@@ -83,6 +84,10 @@ class _AddPlacesScreenState extends State<AddPlacesScreen> {
                   ),
                 ),
                 Imageimput(_savedImageFunction),
+                SizedBox(
+                  height: 20,
+                ),
+                Locationwidget(),
               ],
             ),
           ),
@@ -94,9 +99,10 @@ class _AddPlacesScreenState extends State<AddPlacesScreen> {
                 elevation: MaterialStateProperty.all(0),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap),
             onPressed: () {
-              if (_formkey.currentState!.validate()) {
+              if (!_formkey.currentState!.validate()) {
                 return;
               }
+              print(Provider.of<Placesprovider>(context, listen: false).items);
               _saveplace();
             },
             icon: Icon(Icons.add),

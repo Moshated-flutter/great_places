@@ -4,6 +4,8 @@ class DetailsScreen extends StatelessWidget {
   static const route = '/detailscreen';
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(),
+    );
   }
 }
